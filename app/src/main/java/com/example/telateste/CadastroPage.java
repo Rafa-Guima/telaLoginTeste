@@ -73,6 +73,9 @@ public class CadastroPage extends AppCompatActivity {
         });
 
         btnCadastrar.setOnClickListener(v -> {
+            Intent intent = new Intent(CadastroPage.this, LoginPage.class);
+            Bundle bundle = new Bundle();
+
             if (tipoPassageiroSelecionado) {
                 String nome = editNomePassageiro.getText().toString().trim();
                 String sobrenome = editSobrenomePassageiro.getText().toString().trim();
@@ -83,12 +86,22 @@ public class CadastroPage extends AppCompatActivity {
 
                 if (nome.isEmpty() || sobrenome.isEmpty() || telefone.isEmpty() || email.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()) {
                     Toast.makeText(this, "Preencha todos os campos do passageiro", Toast.LENGTH_SHORT).show();
-                } else if (!senha.equals(confirmarSenha)) {
-                    Toast.makeText(this, "As senhas não coincidem", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Cadastro de passageiro realizado com sucesso!", Toast.LENGTH_SHORT).show();
-                    voltarParaLogin();
+                    return;
                 }
+
+                if (!senha.equals(confirmarSenha)) {
+                    Toast.makeText(this, "As senhas não coincidem", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                bundle.putString("tipo", "Passageiro");
+                bundle.putString("nome", nome);
+                bundle.putString("sobrenome", sobrenome);
+                bundle.putString("telefone", telefone);
+                bundle.putString("email", email);
+                bundle.putString("senha", senha);
+
+                Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
 
             } else if (tipoMotoristaSelecionado) {
                 String nome = editNomeMotorista.getText().toString().trim();
@@ -102,22 +115,37 @@ public class CadastroPage extends AppCompatActivity {
 
                 if (nome.isEmpty() || sobrenome.isEmpty() || telefone.isEmpty() || email.isEmpty() || modelo.isEmpty() || placa.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()) {
                     Toast.makeText(this, "Preencha todos os campos do motorista", Toast.LENGTH_SHORT).show();
-                } else if (!senha.equals(confirmarSenha)) {
-                    Toast.makeText(this, "As senhas não coincidem", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Cadastro de motorista realizado com sucesso!", Toast.LENGTH_SHORT).show();
-                    voltarParaLogin();
+                    return;
                 }
+
+                if (!senha.equals(confirmarSenha)) {
+                    Toast.makeText(this, "As senhas não coincidem", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                bundle.putString("tipo", "Motorista");
+                bundle.putString("nome", nome);
+                bundle.putString("sobrenome", sobrenome);
+                bundle.putString("telefone", telefone);
+                bundle.putString("email", email);
+                bundle.putString("modeloVeiculo", modelo);
+                bundle.putString("placa", placa);
+                bundle.putString("senha", senha);
+
+                Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
+
             } else {
                 Toast.makeText(this, "Selecione Passageiro ou Motorista", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            intent.putExtras(bundle);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         });
     }
 
-    private void voltarParaLogin() {
-        Intent intent = new Intent(CadastroPage.this, LoginPage.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
-    }
+
+
 }
